@@ -1,0 +1,35 @@
+# This is a basic workflow to help you get started with Actions
+
+name: test CI
+# Controls when the workflow will run
+on: [push, pull_request, workflow_dispatch]
+
+  # Allows you to run this workflow manually from the Actions tab
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-test:
+    name: build-and-test-windows
+    runs-on: windows-latest
+    
+    env:
+        Solution_Name: lab5connorcole/lab5connorcole.sln
+        Test_Project_Path: TestProject1/TestProject1.csproj
+
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+  
+        - name: Install .Net core
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '6.0.x'
+            
+        - name: Restore packages
+          run: dotnet restore lab5connorcole.sln
+
+        - name: Build Solution
+          run: dotnet build ${{ env.Solution_Name }} --configuration Release --no-restore
+          
+        - name: Test and publish results
+          run: dotnet test ${{ env.Test_Project_Path }} --no-restore --verbosity normal
+          
