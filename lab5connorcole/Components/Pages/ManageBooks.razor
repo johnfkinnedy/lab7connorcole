@@ -1,0 +1,159 @@
+﻿@page "/books"
+@using lab5connorcole.Services
+@using lab5connorcole.Data
+@inject NavigationManager Nav
+@inject ILibraryService LibraryService
+<PageTitle>Manage Books</PageTitle>
+<button class="btn-success" @onclick="SwapAdd">Add Books</button>
+<button class="btn-warning" @onclick="SwapEdit">Edit a book</button>
+<button class="btn-danger" @onclick="SwapDelete">Delete a Book</button>
+<button class="btn-dark" @onclick="SwapList" >List all books</button>
+
+@if(add)
+{
+
+    <div class="form-group">
+        <label for="playerNumber">Book Title</label>
+        <input id="playerNumber" @bind="title" class="form-text" />
+    </div>
+    <div class="form-group">
+        <label for="playerNumber">Book Author</label>
+        <input id="playerNumber" @bind="author" class="form-text" />
+    </div>
+    <div class="form-group">
+        <label for="playerNumber">Book ISBN</label>
+        <input id="playerNumber" @bind="isbn" class="form-text" />
+    </div>
+
+    <button class="btn-danger" @onclick=AddBook>Submit book to be added?</button>
+}
+
+@if(edit)
+{
+    <div class="form-group">
+        <label for="playerNumber">Enter the ID of the book to edit</label>
+        <input id="playerNumber" @bind="id" class="form-text" />
+    </div>
+
+    @if(id > 0)
+    {
+        <p>@id</p>
+        <p>Leave blank to keep the same</p>
+        <div class="form-group">
+            <label for="playerNumber">Book Title</label>
+            <input id="playerNumber" @bind="title" class="form-text" />
+        </div>
+        <div class="form-group">
+            <label for="playerNumber">Book Author</label>
+            <input id="playerNumber" @bind="author" class="form-text" />
+        </div>
+        <div class="form-group">
+            <label for="playerNumber">Book ISBN</label>
+            <input id="playerNumber" @bind="isbn" class="form-text" />
+        </div>
+
+        <button class="btn-danger" @onclick=EditBook>Edit selected book?</button>
+    }
+}
+@if(delete)
+{
+        <div class="form-group">
+        <label for="playerNumber">Enter the ID of the book to Delete</label>
+        <input id="playerNumber" @bind="id" class="form-text" />
+    </div>
+
+    @if (id > 0)
+    {
+        <button class="btn-danger" @onclick=DeleteBook>DELETE BOOK!!!!!!!</button>
+    }
+}
+
+@if(list)
+{
+    <table class="table-danger">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+        </tr>
+        @foreach( var book in books)
+        {
+            <tr>
+                <td>@book.Id</td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.ISBN</td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    public bool add = false;
+    public bool edit = false;
+    public bool delete = false;
+    public bool list = false;
+
+    public string title { get; set; }
+    public string author { get; set; }
+    public string isbn { get; set; }
+
+    public int id { get; set; }
+
+    public List<Book> books { get; set; } = new List<Book>();
+
+    protected override Task OnInitializedAsync()
+    {
+        books = LibraryService.ListBooks();
+        return base.OnInitializedAsync();
+    }
+
+    public void SwapAdd()
+    {
+        add = !add;
+        StateHasChanged();
+    }
+    public void SwapEdit()
+    {
+        edit = !edit;
+        StateHasChanged();
+
+    }
+    public void SwapDelete()
+    {
+        delete = !delete;
+        StateHasChanged();
+    }
+    public void SwapList()
+    {
+        list = !list;
+        StateHasChanged();
+    }
+
+    public void AddBook()
+    {
+        LibraryService.AddBook(title, author, isbn);
+        title = string.Empty;
+        author = string.Empty;
+        isbn = string.Empty;
+        StateHasChanged();
+    }
+
+    public void EditBook()
+    {
+        LibraryService.EditBook(id, title, author, isbn);
+        title = string.Empty;
+        author = string.Empty;
+        isbn = string.Empty;
+        id = 0;
+        StateHasChanged();
+    }
+
+    public void DeleteBook()
+    {
+        LibraryService.DeleteBook(id);
+        id = 0;
+        StateHasChanged();
+    }
+}

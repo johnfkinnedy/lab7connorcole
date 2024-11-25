@@ -1,0 +1,143 @@
+﻿@page "/users"
+@using lab5connorcole.Services
+@using lab5connorcole.Data
+@inject NavigationManager Nav
+@inject ILibraryService LibraryService
+
+<PageTitle>Manage Users</PageTitle>
+
+<button class="btn-success" @onclick="SwapAdd">Add Users</button>
+<button class="btn-warning" @onclick="SwapEdit">Edit a User</button>
+<button class="btn-danger" @onclick="SwapDelete">Delete a User</button>
+<button class="btn-dark" @onclick="SwapList">List all Users</button>
+
+@if (add)
+{
+    <div class="form-group">
+        <label for="playerNumber">Name</label>
+        <input id="playerNumber" @bind="name" class="form-text" />
+    </div>
+    <div class="form-group">
+        <label for="playerNumber">Email Address</label>
+        <input id="playerNumber" @bind="email" class="form-text" />
+    </div>
+
+    <button class="btn-danger" @onclick=AddUser>Submit user to be added?</button>
+
+}
+@if (edit)
+{
+    <div class="form-group">
+        <label for="playerNumber">Enter the ID of the user to edit</label>
+        <input id="playerNumber" @bind="id" class="form-text" />
+    </div>
+
+    if (id > 0)
+    {
+        <p>@id</p>
+        <p>Leave blank to keep the same</p>
+        <div class="form-group">
+            <label for="playerNumber">User name Title</label>
+            <input id="playerNumber" @bind="name" class="form-text" />
+        </div>
+        <div class="form-group">
+            <label for="playerNumber">User email</label>
+            <input id="playerNumber" @bind="email" class="form-text" />
+        </div>
+
+        <button class="btn-danger" @onclick=EditUser>Edit selected user?</button>
+    }
+}
+@if (delete)
+{
+    <div class="form-group">
+        <label for="playerNumber">Enter the ID of the user to edit</label>
+        <input id="playerNumber" @bind="id" class="form-text" />
+    </div>
+
+    @if (id > 0)
+    {
+        <button class="btn-danger" @onclick=DeleteUser>DELETE!!!!!!</button>
+    }
+}
+@if (list)
+{
+    <table class="table-danger">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+            </tr>
+        }
+    </table>
+}
+@code {
+    public bool add = false;
+    public bool edit = false;
+    public bool delete = false;
+    public bool list = false;
+
+    public string name { get; set; }
+    public string email { get; set; }
+
+    public int id { get; set; }
+
+    public List<User> users { get; set; } = new List<User>();
+
+    protected override Task OnInitializedAsync()
+    {
+        users = LibraryService.ListUsers();
+        return base.OnInitializedAsync();
+    }
+
+    public void SwapAdd()
+    {
+        add = !add;
+        StateHasChanged();
+    }
+    public void SwapEdit()
+    {
+        edit = !edit;
+        StateHasChanged();
+
+    }
+    public void SwapDelete()
+    {
+        delete = !delete;
+        StateHasChanged();
+    }
+    public void SwapList()
+    {
+        list = !list;
+        StateHasChanged();
+    }
+
+    public void AddUser()
+    {
+        LibraryService.AddUser(name, email);
+        name = string.Empty;
+        email = string.Empty;
+        StateHasChanged();
+    }
+    public void EditUser()
+    {
+        LibraryService.EditUser(id, name, email);
+        name = string.Empty;
+        email = string.Empty;
+        id = 0;
+        StateHasChanged();
+    }
+    public void DeleteUser()
+    {
+        LibraryService.DeleteUser(id);
+        id = 0;
+        StateHasChanged();
+    }
+}

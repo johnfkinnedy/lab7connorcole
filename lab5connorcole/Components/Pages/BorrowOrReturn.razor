@@ -1,0 +1,97 @@
+﻿@page "/borrow"
+@using lab5connorcole.Services
+@using lab5connorcole.Data
+@inject NavigationManager Nav
+@inject ILibraryService LibraryService
+
+<PageTitle>Manage Borrowed Books</PageTitle>
+<table>
+
+</table>
+<div></div>
+
+<div class="form-group">
+    <label for="playerNumber">Enter the ID of the user you'd like to borrow books for!</label>
+    <input id="playerNumber" @bind="userID" class="form-text" />
+</div>
+<button class="btn-success" @onclick=UpdateCurrentUser>Select this user?</button>
+@if (user != null)
+{
+    <h1>Current borrowed books by user @user.Name</h1>
+    <table>
+        @foreach(Book book in borrowedBooks[user])
+        {
+            <tr>
+                <td></td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+            </tr>
+        }
+    </table>
+
+    <div class="form-group">
+    <label for="playerNumber">Enter the ID of the book you'd like to borrow as user @userID</label>
+    <input id="playerNumber" @bind="bookID" class="form-text" />
+</div>
+<div></div>
+<button class="btn-danger" @onclick=BorrowBook>Borrow this book?</button>
+
+
+    <div class="form-group">
+        <label for="playerNumber">Enter the number that you'd like to return as user @userID (take your best guess as to the numbers. start counting at 1</label>
+        <input id="playerNumber" @bind="bookNum" class="form-text" />
+    </div>
+<button class="btn-success" @onclick=ReturnBook>Return this book?</button>
+}
+
+@code {
+
+    public List<Book> books { get; set; } = new List<Book>();
+    public List<User> users { get; set; } = new List<User>();
+    public Dictionary<User, List<Book>> borrowedBooks { get; set; } = new Dictionary<User, List<Book>>();
+
+    public int userID { get; set; }
+    public int bookID { get; set; }
+    public int bookNum { get; set; }
+    public User user { get; set; }
+    public Book book { get; set; }
+    public int bookcount { get; set; }
+
+    public void LoadData()
+    {
+        books = LibraryService.ListBooks();
+        users = LibraryService.ListUsers();
+        borrowedBooks = LibraryService.ListBorrowedBooks();
+        StateHasChanged();
+
+    }
+    protected override Task OnInitializedAsync()
+    {
+        LoadData();
+        return base.OnInitializedAsync();
+    }
+    public void UpdateCurrentUser()
+    {
+        user = users.FirstOrDefault(u => u.Id == userID);
+
+        if (!borrowedBooks.ContainsKey(user))
+        {
+            borrowedBooks[user] = new List<Book>();
+        }
+        StateHasChanged();
+    }
+
+    public void BorrowBook()
+    {
+        LibraryService.BorrowBook(bookID, userID);
+        bookcount++;
+        StateHasChanged();
+
+    }
+
+    public void ReturnBook()
+    {
+        LibraryService.ReturnBook(bookNum, userID);
+        StateHasChanged();
+    }
+}

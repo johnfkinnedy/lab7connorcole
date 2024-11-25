@@ -1,0 +1,27 @@
+﻿@page "/"
+@using lab5connorcole.Services
+@using lab5connorcole.Data
+@inject NavigationManager Nav
+@inject ILibraryService LibraryService
+
+
+<PageTitle>Home</PageTitle>
+
+<h1>Book tuah!</h1>
+<h2>Read on that thang</h2>
+@code {
+
+    public List<Book> books { get; set; } = new List<Book>();
+
+    public void LoadData()
+    {
+        books = LibraryService.ListBooks();
+        StateHasChanged();
+
+    }
+    protected override Task OnInitializedAsync()
+    {
+        LoadData();
+        return base.OnInitializedAsync();
+    }
+}
