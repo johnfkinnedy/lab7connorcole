@@ -25,7 +25,7 @@ jobs:
             dotnet-version: '6.0.x'
             
         - name: Restore packages
-          run: dotnet restore lab5connorcole.sln
+          run: dotnet restore ${{ env.Solution_Name }}
 
         - name: Build Solution
           run: dotnet build ${{ env.Solution_Name }} --configuration Release --no-restore
