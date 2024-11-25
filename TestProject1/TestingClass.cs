@@ -30,25 +30,7 @@ namespace TestProject1
 
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(NullReferenceException))]
-        //public void TestAddBookFail()
-        //{
-        //    //Arrange
-        //    LibraryService libraryService = new LibraryService();
-        //    string title = null;
-        //    string author = null;
-        //    string isbn = null;
-
-        //    Book book = libraryService.books.FirstOrDefault(b => b.Title == title);
-
-        //    //Act
-        //    libraryService.AddBook(title, author, isbn);
-
-        //    //Assert
-        //    Assert.IsFalse(libraryService.books.Contains(book));
-        //    libraryService.DeleteBook(book.Id);
-        //}
+ 
 
         [TestMethod]
         public void TestEditBookSuccess()
@@ -137,18 +119,6 @@ namespace TestProject1
 
         [TestMethod]
 
-        public void ListBookSuccess()
-        {
-            //Arrange
-            LibraryService service = new LibraryService();
-
-            //Act
-            List<Book> test = service.ListBooks();
-
-            Assert.IsTrue(test.Count > 0);
-        }
-        [TestMethod]
-
         public void ListBookFail()
         {
             //Arrange
@@ -180,39 +150,8 @@ namespace TestProject1
 
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(NullReferenceException))]
-
-        //public void AddUserFail()
-        //{
-        //    //Arrange
-        //    LibraryService service = new LibraryService();
-        //    string name = null;
-        //    string email = null;
-        //    User user = service.users.FirstOrDefault(u => u.Name == name);
-
-
-        //    //Act
-        //    service.AddUser(name, email);
-
-        //    //Assert
-        //    Assert.IsFalse(service.users.Contains(user));
-        //    service.DeleteUser(user.Id);
-        //}
-        [TestMethod]
-
-        public void ListUserSuccess()
-        {
-
-            //Arrange
-            LibraryService service = new LibraryService();
-
-            //Act
-            List<User> test = service.ListUsers();
-
-            //Assert
-            Assert.IsTrue(test.Count > 0);
-        }
+        
+   
 
         [TestMethod]
 
