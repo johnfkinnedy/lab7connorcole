@@ -20,7 +20,7 @@ namespace lab5connorcole.Services
         {
             try
             {
-                foreach (var line in File.ReadLines("Data\\Books.csv"))
+                foreach (var line in File.ReadLines("../Data/Books.csv"))
                 {
                     var fields = line.Split(',');
                     if (fields.Length >= 4)
@@ -47,7 +47,7 @@ namespace lab5connorcole.Services
         {
             try
             {
-                foreach (var line in File.ReadLines("Data\\Users.csv"))
+                foreach (var line in File.ReadLines("../Data/Users.csv"))
                 {
 
                     var fields = line.Split(',');
@@ -119,7 +119,7 @@ namespace lab5connorcole.Services
 
         public async void UpdateBookList()
         {
-            using (var writer = new StreamWriter("Data\\Books.csv"))
+            using (var writer = new StreamWriter("../Data/Books.csv"))
             {
                 foreach (Book book in books)
                 {
@@ -168,7 +168,7 @@ namespace lab5connorcole.Services
 
         async void UpdateUserList()
         {
-            using (var writer = new StreamWriter("Data\\Users.csv"))
+            using (var writer = new StreamWriter("../Data/Users.csv"))
                 foreach (User user in users)
                 {
                     string str = $"{user.Id.ToString()}, {user.Name}, {user.Email}";
