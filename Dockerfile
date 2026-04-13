@@ -21,6 +21,7 @@ RUN dotnet publish -o out
 # now we need to create the part that actually runs the project
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 WORKDIR /App/lab5connorcole
+EXPOSE 8080
 # copies the published build contents into our /App directory,
 # allowing us to work with those files (and our app, now executable)
 COPY --from=build /App/lab5connorcole/out . 
@@ -36,12 +37,14 @@ ENTRYPOINT ["dotnet", "lab5connorcole.dll"]
 # this creates a local repository named.. whatever you enter 
 # -f points to the Dockerfile (replace with your path, if different)
 
-# to create a new contaner, run
-# docker create --name container-name image-name
-# this creates a container based on your image (replace image-name)
-# the output from here should show you the container ID 
+# to start a blazor app in docker, run 
+# docker run -p 8080:80 --name container-name image-name
 
-# to start a container, run
-# docker start container-name
-# likewise, you can run docker stop container-name to stop it
-# docker ps shows running containers, docker ps -a shows all containers 
+#to show logs, do 
+# docker logs -f image-name (or --follow)
+
+# to stop a contaner:
+# docker stop <container name/id>
+
+# to run a stopped container, 
+# docker start <container name/id>
